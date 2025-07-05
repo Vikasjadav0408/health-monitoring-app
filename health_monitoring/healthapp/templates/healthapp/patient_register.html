@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Registration</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #e3f2fd; }
+        .register-container { max-width: 400px; margin: 5rem auto; background: #fff; padding: 2rem; border-radius: 1rem; box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08); }
+        h2 { color: #1976d2; }
+        input[type="text"], input[type="password"], input[type="email"] { width: 100%; padding: 0.7rem; margin: 0.5rem 0 1rem 0; border: 1px solid #bdbdbd; border-radius: 0.5rem; }
+        button { background: #1976d2; color: #fff; border: none; padding: 0.7rem 2rem; border-radius: 2rem; font-weight: 600; cursor: pointer; }
+        button:hover { background: #1565c0; }
+        .login-link { margin-top: 1rem; text-align: center; font-size: 0.98rem; }
+        .login-link a { color: #1976d2; text-decoration: underline; font-weight: 500; }
+        .login-link a:hover { color: #1565c0; }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Patient Registration</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            <button type="submit">Register</button>
+        </form>
+        <div class="login-link">
+            Already have an account? <a href="/login/patient/">Login here</a>
+        </div>
+    </div>
+</body>
+</html> 

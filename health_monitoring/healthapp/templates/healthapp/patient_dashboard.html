@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f8fb; margin: 0; }
+        .dashboard-container { max-width: 900px; margin: 3rem auto; background: #fff; padding: 2rem 2.5rem; border-radius: 1rem; box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08); }
+        h2 { color: #1976d2; margin-bottom: 1.5rem; }
+        .stats, .activity { margin-bottom: 2rem; }
+        .stats-grid { display: flex; gap: 2rem; flex-wrap: wrap; }
+        .stat-card { background: #e3f2fd; border-radius: 0.7rem; padding: 1.2rem 2rem; flex: 1 1 200px; text-align: center; box-shadow: 0 1px 6px rgba(25, 118, 210, 0.06); }
+        .stat-card h3 { margin: 0.5rem 0 0.2rem 0; color: #1976d2; font-size: 1.3rem; }
+        .stat-card p { margin: 0; font-size: 2rem; font-weight: bold; color: #222; }
+        .activity-list { list-style: none; padding: 0; }
+        .activity-list li { background: #f4f8fb; margin-bottom: 0.7rem; padding: 0.8rem 1rem; border-radius: 0.5rem; box-shadow: 0 1px 4px rgba(25, 118, 210, 0.04); }
+        .logout-btn { float: right; background: #1976d2; color: #fff; border: none; padding: 0.5rem 1.2rem; border-radius: 2rem; font-weight: 600; cursor: pointer; margin-top: -2.5rem; }
+        .logout-btn:hover { background: #1565c0; }
+        @media (max-width: 700px) { .dashboard-container { padding: 1rem; } .stats-grid { flex-direction: column; gap: 1rem; } }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        {% if messages %}
+          <ul style="list-style: none; padding: 0; margin: 0 0 1rem 0; background: #4caf50; color: white; padding: 1rem; text-align: center; border-radius: 0.5rem;">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        <h2>Welcome, patient : {{ request.user.username }}!</h2>
+        <div style="margin-bottom: 2rem;">
+            <a href="{% url 'add_health_data' %}" style="background: #4caf50; color: #fff; padding: 0.7rem 1.5rem; border-radius: 2rem; text-decoration: none; font-weight: 600; margin-right: 1rem;">Add Health Data</a>
+            <a href="{% url 'list_doctors' %}" style="background: #ff9800; color: #fff; padding: 0.7rem 1.5rem; border-radius: 2rem; text-decoration: none; font-weight: 600;">Book Appointment</a>
+        </div>
+        <div class="stats">
+            <h3>Your Health Stats</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Heart Rate</h3>
+                    <p>{% if vital_status.heart_rate %}{{ vital_status.heart_rate }}{% else %}-- bpm{% endif %}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Blood Pressure</h3>
+                    <p>{% if vital_status.blood_pressure %}{{ vital_status.blood_pressure }}{% else %}-- / --{% endif %}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Blood Sugar</h3>
+                    <p>{% if vital_status.blood_sugar %}{{ vital_status.blood_sugar }}{% else %}-- mg/dL{% endif %}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Temperature</h3>
+                    <p>{% if vital_status.temperature %}{{ vital_status.temperature }}{% else %}-- °C{% endif %}</p>
+                </div>
+            </div>
+        </div>
+        <div class="activity">
+            <h3>Recent Activity</h3>
+            <ul class="activity-list">
+                {% if recent_activity %}
+                    {% for activity in recent_activity %}
+                        <li>{{ activity.date|date:"M d, Y H:i" }} - 
+                            {% if activity.heart_rate %}Heart Rate: {{ activity.heart_rate }} bpm{% endif %}
+                            {% if activity.blood_pressure_systolic %}BP: {{ activity.blood_pressure_systolic }}/{{ activity.blood_pressure_diastolic }}{% endif %}
+                            {% if activity.blood_sugar %}Sugar: {{ activity.blood_sugar }} mg/dL{% endif %}
+                            {% if activity.notes %}{{ activity.notes }}{% endif %}
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No recent activity yet.</li>
+                {% endif %}
+            </ul>
+        </div>
+        
+        <div class="appointments">
+            <h3>Your Appointments</h3>
+            {% if patient_appointments %}
+                <ul class="activity-list">
+                    {% for appointment in patient_appointments %}
+                        <li>
+                            <strong>Dr. {{ appointment.doctor.username }}</strong> - 
+                            {{ appointment.appointment_date|date:"M d, Y" }} at {{ appointment.appointment_time|time:"H:i" }}
+                            <br>
+                            Status: <span class="status-{{ appointment.status }}">{{ appointment.status|title }}</span>
+                            {% if appointment.notes %}
+                                <br>Notes: {{ appointment.notes }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No appointments booked yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html> 

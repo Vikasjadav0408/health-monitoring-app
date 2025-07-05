@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Doctors</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #e3f2fd; margin: 0; }
+        .container { max-width: 800px; margin: 3rem auto; background: #fff; padding: 2rem; border-radius: 1rem; box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08); }
+        h2 { color: #1976d2; margin-bottom: 1.5rem; }
+        .doctor-card { background: #f4f8fb; border-radius: 0.7rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 6px rgba(25, 118, 210, 0.06); }
+        .doctor-name { font-size: 1.3rem; font-weight: bold; color: #1976d2; margin-bottom: 0.5rem; }
+        .doctor-email { color: #666; margin-bottom: 1rem; }
+        .book-btn { background: #ff9800; color: #fff; border: none; padding: 0.5rem 1.2rem; border-radius: 2rem; font-weight: 600; cursor: pointer; text-decoration: none; }
+        .book-btn:hover { background: #f57c00; }
+        .back-btn { background: #666; color: #fff; border: none; padding: 0.5rem 1.2rem; border-radius: 2rem; font-weight: 600; cursor: pointer; text-decoration: none; margin-bottom: 1rem; }
+        .back-btn:hover { background: #555; }
+        .no-doctors { text-align: center; color: #666; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'patient_dashboard' %}" class="back-btn">← Back to Dashboard</a>
+        <h2>Available Doctors</h2>
+        
+        {% if doctors %}
+            {% for doctor in doctors %}
+                <div class="doctor-card">
+                    <div class="doctor-name">Dr. {{ doctor.username }}</div>
+                    <div class="doctor-email">{{ doctor.email }}</div>
+                    <a href="{% url 'book_appointment' doctor.id %}" class="book-btn">Book Appointment</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-doctors">
+                <p>No doctors are currently registered.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html> 

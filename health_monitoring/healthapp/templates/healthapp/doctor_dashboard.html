@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f8fb; margin: 0; }
+        .dashboard-container { max-width: 900px; margin: 3rem auto; background: #fff; padding: 2rem 2.5rem; border-radius: 1rem; box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08); }
+        h2 { color: #1976d2; margin-bottom: 1.5rem; }
+        .appointments { margin-bottom: 2rem; }
+        .appointment-list { list-style: none; padding: 0; }
+        .appointment-item { background: #f4f8fb; margin-bottom: 0.7rem; padding: 1rem; border-radius: 0.5rem; box-shadow: 0 1px 4px rgba(25, 118, 210, 0.04); }
+        .appointment-header { font-weight: bold; color: #1976d2; margin-bottom: 0.5rem; }
+        .appointment-details { color: #666; font-size: 0.9rem; }
+        .logout-btn { float: right; background: #1976d2; color: #fff; border: none; padding: 0.5rem 1.2rem; border-radius: 2rem; font-weight: 600; cursor: pointer; margin-top: -2.5rem; text-decoration: none; }
+        .logout-btn:hover { background: #1565c0; }
+        .no-appointments { text-align: center; color: #666; font-style: italic; }
+        .status-pending { color: #ff9800; }
+        .status-confirmed { color: #4caf50; }
+        .status-cancelled { color: #f44336; }
+        .status-completed { color: #2196f3; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        {% if messages %}
+          <ul style="list-style: none; padding: 0; margin: 0 0 1rem 0; background: #4caf50; color: white; padding: 1rem; text-align: center; border-radius: 0.5rem;">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        <h2>Welcome, Dr. {{ request.user.username }}!</h2>
+        
+        <div class="appointments">
+            <h3>Your Appointments</h3>
+            {% if appointments %}
+                <ul class="appointment-list">
+                    {% for appointment in appointments %}
+                        <li class="appointment-item">
+                            <div class="appointment-header">
+                                Patient: {{ appointment.patient.username }}
+                            </div>
+                            <div class="appointment-details">
+                                Date: {{ appointment.appointment_date }} at {{ appointment.appointment_time }}<br>
+                                Status: <span class="status-{{ appointment.status }}">{{ appointment.status|title }}</span><br>
+                                {% if appointment.notes %}
+                                    Notes: {{ appointment.notes }}
+                                {% endif %}
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <form method="post" action="{% url 'update_appointment_status' appointment.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <select name="status" style="padding: 0.3rem; border-radius: 0.3rem; margin-right: 0.5rem;">
+                                        <option value="pending" {% if appointment.status == 'pending' %}selected{% endif %}>Pending</option>
+                                        <option value="confirmed" {% if appointment.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                                        <option value="cancelled" {% if appointment.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                        <option value="completed" {% if appointment.status == 'completed' %}selected{% endif %}>Completed</option>
+                                    </select>
+                                    <button type="submit" style="background: #1976d2; color: #fff; border: none; padding: 0.3rem 0.8rem; border-radius: 0.3rem; cursor: pointer;">Update Status</button>
+                                </form>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="no-appointments">
+                    <p>No appointments scheduled yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Login</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #e3f2fd; }
+        .login-container { max-width: 400px; margin: 5rem auto; background: #fff; padding: 2rem; border-radius: 1rem; box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08); }
+        h2 { color: #1976d2; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 0.7rem; margin: 0.5rem 0 1rem 0; border: 1px solid #bdbdbd; border-radius: 0.5rem; }
+        button { background: #1976d2; color: #fff; border: none; padding: 0.7rem 2rem; border-radius: 2rem; font-weight: 600; cursor: pointer; }
+        button:hover { background: #1565c0; }
+        .register-link {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.98rem;
+        }
+        .register-link a {
+            color: #1976d2;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        .register-link a:hover {
+            color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <div class="login-container">
+        <h2>Patient Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="register-link">
+            Not registered? <a href="/register/patient/">Register here</a>
+        </div>
+    </div>
+</body>
+</html> 
