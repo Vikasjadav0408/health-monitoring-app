@@ -1,10 +1,10 @@
-• Health monitoring system
-◦ developed The Health Monitoring System is a healthcare solution designed for patients and doctors. Patients can 
+📌 Project Overview
+◦ The Health Monitoring System is a healthcare solution designed for patients and doctors. Patients can 
   manage health profiles, track vital signs, and book appointments with healthcare providers. Doctors update profiles, 
   view patient health data, and manage appointment schedules. Admins add and manage users across the platform. The 
   system utilizes Django and Python for a robust web experience, ensuring enhanced patient care and efficient 
   healthcare management
-◦The Health Monitoring System is a comprehensive web-based healthcare platform designed to improve communication and management between patients, doctors, and administrators.
+◦ The Health Monitoring System is a comprehensive web-based healthcare platform designed to improve communication and management between patients, doctors, and administrators.
   It allows users to track medical data, schedule appointments, and streamline clinical workflows — all in one centralized system.
 
 🚀 Features
@@ -17,3 +17,10 @@
   View patient health records and vitals
   Update patient diagnoses or notes
   Manage appointment calendars
+  
+🛠️ Tech Stack
+Layer	          Technology
+Backend	        Python, Django
+Frontend	      HTML, CSS, Bootstrap
+Database	      SQLite (can be upgraded to MySQL/PostgreSQL)
+Authentication	Django’s built-in auth system
